@@ -1,13 +1,36 @@
 <script setup>
-import {ref} from "vue";
+import { useForm } from 'vee-validate';
+import * as yup from 'yup'
 
-const email = ref('');
-const password = ref('');
-const fio = ref('')
+const yupValidationSchema = yup.object({
+  email: yup
+      .string()
+      .email('Некорректная почта')
+      .required('Поле является обязательным'),
+  password: yup.string().min(6).max(20)
+})
+const {
+  defineField,
+  errors,
+  handleSubmit
+} = useForm({
+  validationSchema: yupValidationSchema
+})
+
+/** объявление полей для хранения значений */
+const [email, emailAttrs] = defineField('email')
+const [password, passwordAttrs] = defineField('password')
+const [fio, fioAttrs] = defineField('fio')
+
+const submit = handleSubmit((values) => {
+  console.log(values) /** Выведет { email: 'введенный_email', password: 'введенный_пароль' } */
+})
 </script>
 
 <template>
-  <div class="m-0 p-0 justify-center items-center min-h-svh overflow-hidden flex">
+  <div
+    class="m-0 p-0 justify-center items-center min-h-svh overflow-hidden flex"
+  >
     <div class="main overflow-hidden rounded-xl drop-shadow-2xl">
       <input
         id="chk"
@@ -16,7 +39,7 @@ const fio = ref('')
         aria-hidden="true"
       />
       <div class="relative w-full h-full">
-        <form @submit.prevent>
+        <form @submit.prevent="submit">
           <label
             class="label"
             for="chk"
@@ -27,29 +50,52 @@ const fio = ref('')
 
           <input
             v-model="fio"
+            id="fio"
+            v-bind="fioAttrs"
             type="text"
-            name="txt"
+            name="fio"
             placeholder="ФИО"
             required
           />
 
           <input
+            v-bind="emailAttrs"
+            id="email"
             v-model="email"
             type="email"
             name="email"
             placeholder="Почта"
             required
           />
+          <p
+            v-if="errors.email"
+            class="ml-40 text-base -mt-3.5 opacity-80 text-blue-950"
+          >
+            {{ errors.email }}
+          </p>
 
           <input
+            v-bind="passwordAttrs"
+            id="password"
             v-model="password"
             type="password"
-            name="pswd"
+            name="password"
             placeholder="Пароль"
             required
           />
+          <p
+            v-if="errors.password"
+            class="ml-40 text-base -mt-3.5 opacity-80 text-blue-950"
+          >
+            {{ errors.password }}
+          </p>
 
-          <button type="submit">Зарегистрироваться</button>
+          <button
+            :disabled="errors.email || errors.password"
+            type="submit"
+          >
+            Зарегистрироваться
+          </button>
         </form>
       </div>
 
@@ -87,7 +133,7 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:active,
 input:-webkit-autofill:focus {
-  background-color: #FFFFFF !important;
+  background-color: #ffffff !important;
   color: #555 !important;
   -webkit-box-shadow: 0 0 0 1000px #d3d2ff inset !important;
   -webkit-text-fill-color: #06459c !important;
