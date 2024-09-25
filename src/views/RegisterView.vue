@@ -1,6 +1,8 @@
 <script setup>
 import { useForm } from 'vee-validate';
 import * as yup from 'yup'
+import axios from "axios";
+const API_LINK = 'http://lifestealer86.ru/api-shop/signup'
 
 const yupValidationSchema = yup.object({
   email: yup
@@ -8,6 +10,7 @@ const yupValidationSchema = yup.object({
       .email('Некорректная почта')
       .required('Поле является обязательным'),
   password: yup.string().min(6).max(20)
+
 })
 const {
   defineField,
@@ -23,8 +26,13 @@ const [password, passwordAttrs] = defineField('password')
 const [fio, fioAttrs] = defineField('fio')
 
 const submit = handleSubmit((values) => {
-  console.log(values) /** Выведет { email: 'введенный_email', password: 'введенный_пароль' } */
+  axios.post(API_LINK, {
+    email: values.email,
+    password: values.password
+  }).then((res) => console.log(res.data))
+      .catch((err) => console.error(err))
 })
+
 </script>
 
 <template>
@@ -49,8 +57,8 @@ const submit = handleSubmit((values) => {
           </label>
 
           <input
-            v-model="fio"
             id="fio"
+            v-model="fio"
             v-bind="fioAttrs"
             type="text"
             name="fio"
@@ -100,7 +108,7 @@ const submit = handleSubmit((values) => {
       </div>
 
       <div class="login">
-        <form @submit.prevent>
+        <form @submit.prevent="submit">
           <label
             class="label"
             for="chk"

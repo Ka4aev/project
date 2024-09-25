@@ -1,8 +1,13 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import Card from "@/components/Card.vue";
+import {useCardStore} from "@/stores/CardStore.js";
 
 const showScroll = ref(false);
+
+const cardStore = useCardStore()
+const { getCards } = useCardStore()
+const data = ref();
 
 const handleScroll = () => {
   showScroll.value = window.scrollY > window.innerHeight * 0.3;
@@ -12,7 +17,8 @@ const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-onMounted(() => {
+onMounted(async () => {
+  data.value = await getCards()
   window.addEventListener('scroll', handleScroll);
 });
 
@@ -25,7 +31,11 @@ onBeforeUnmount(() => {
   <div>
     <div class="catalog tracking-widest flex text-xl items-center justify-center uppercase p-2"><span class="text-white">каталог</span></div>
     <section class="p-9 flex flex-wrap gap-y-16 justify-between bg-white rounded-sm min-h-svh w-full">
-      <card v-for="item in 100" />
+      <card
+        v-for="card of cardStore.cards"
+        :key="card"
+        :card = "card"
+      />
     </section>
     <img
       v-if="showScroll"
