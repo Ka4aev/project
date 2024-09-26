@@ -22,7 +22,12 @@ const handleLogin = () => {
       >
         Вход
       </label>
-
+      <p
+        v-if="authStore.loginError"
+        class="text-red-600 text-center"
+      >
+        {{ authStore.loginError }}
+      </p>
       <input
         v-model="email"
         type="email"
@@ -107,7 +112,7 @@ button:hover {
   background: #568ee4;
 }
 .login {
-  height: 460px;
+  height: 490px;
   background: #eee;
   border-radius: 60% / 10%;
   transform: translateY(-190px);

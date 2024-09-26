@@ -11,6 +11,7 @@ export const useCardStore = defineStore("cardStore", () => {
         console.log(cards.value)
     };
 
+
     return {
         cards,
         getCards,

@@ -7,9 +7,17 @@ const props = defineProps({
   card:{
     type: Object,
     required: true
-  }
+  },
+  cardId:{
+    type: Number,
+    required: true
+  },
 })
+const authStore = useAuthStore();
 const { isAuthenticated } = storeToRefs(useAuthStore())
+
+const addToCart = async (productId) => await authStore.addToCart(productId);
+
 
 const buySectionHeight = computed(() => {
   const baseHeight = 40; // базовая высота
@@ -20,7 +28,6 @@ const buySectionHeight = computed(() => {
 const imageUrl = computed(() => {
   return `${import.meta.env.VITE_API_IMG}${props.card.image}`;
 });
-console.log(props.card)
 </script>
 
 <template>
@@ -34,6 +41,7 @@ console.log(props.card)
     <button
       v-if="isAuthenticated"
       class="buy-button tracking-widest"
+      @click="addToCart(props.cardId)"
     >
       в корзину
     </button>

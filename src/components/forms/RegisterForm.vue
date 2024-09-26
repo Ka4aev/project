@@ -17,8 +17,8 @@ const yupValidationSchema = yup.object({
       .string()
       .email('Некорректная почта')
       .required('Поле является обязательным'),
-  password: yup.string().min(6).max(20)
-
+  password: yup.string().min(6, 'Минимум 6 символов').max(20).required('Поле является обязательным'),
+  fio: yup.string().required('Поле является обязательным')
 })
 const {
   defineField,
@@ -57,21 +57,28 @@ onMounted(() => console.log(isAuthenticated.value))
     >
       Регистрация
     </label>
-
+  
     <input
       id="fio"
       v-model="fio"
       v-bind="fioAttrs"
+      :class ="{'error-input' : errors.fio}"
       type="text"
       name="fio"
       placeholder="ФИО"
       required
     />
-
+    <p
+      v-if="errors.fio"
+      class="ml-40 text-base -mt-3.5 opacity-80 text-blue-950"
+    >
+      {{ errors.fio }}
+    </p>
     <input
       v-bind="emailAttrs"
       id="email"
       v-model="email"
+      :class ="{'error-input' : errors.email}"
       type="email"
       name="email"
       placeholder="Почта"
@@ -88,9 +95,11 @@ onMounted(() => console.log(isAuthenticated.value))
       v-bind="passwordAttrs"
       id="password"
       v-model="password"
+      :class="{'error-input' : errors.password}"
       type="password"
       name="password"
       placeholder="Пароль"
+      
       required
     />
     <p
@@ -120,7 +129,10 @@ input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0 1000px #d3d2ff inset !important;
   -webkit-text-fill-color: #06459c !important;
 }
+.error-input{
+  border: 0.15rem solid rgba(255, 0, 0, 0.78);
 
+}
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -134,7 +146,7 @@ label {
   font-size: 2.5em;
   justify-content: center;
   display: flex;
-  margin: 50px;
+  margin:40px;
   font-weight: bold;
   cursor: pointer;
   transition: 0.5s ease-in-out;
