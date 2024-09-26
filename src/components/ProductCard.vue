@@ -1,5 +1,7 @@
 <script setup>
 import {computed} from "vue";
+import {storeToRefs} from "pinia";
+import {useAuthStore} from "@/stores/AuthStore.js";
 
 const props = defineProps({
   card:{
@@ -7,6 +9,8 @@ const props = defineProps({
     required: true
   }
 })
+const { isAuthenticated } = storeToRefs(useAuthStore())
+
 const buySectionHeight = computed(() => {
   const baseHeight = 40; // базовая высота
   const extraHeight = Math.ceil(props.card.description.length / 5) * 5;
@@ -27,7 +31,12 @@ console.log(props.card)
       alt="Product Image"
     >
 
-    <button class="buy-button tracking-widest">в корзину</button>
+    <button
+      v-if="isAuthenticated"
+      class="buy-button tracking-widest"
+    >
+      в корзину
+    </button>
     <div class="info mt-4 flex justify-between tracking-wide ">
       <p>{{ card.name }}</p>
       <span class="text-green-600 pl-2">₽{{ card.price }}</span>

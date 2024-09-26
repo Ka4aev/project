@@ -1,17 +1,19 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
-import {ref} from "vue";
+import {computed, ref} from "vue";
+import {useRouter} from "vue-router";
 
-export const authStore = defineStore('auth', () => {
-    const token = ref(null);
+export const useAuthStore = defineStore('auth', () => {
+    const token = ref(localStorage.getItem('token'));
+    const router = useRouter()
 
     const login = async (credentials) => {
         try {
             const response = await axios.post('http://lifestealer86.ru/api-shop/login', credentials);
-            console.log(response)
-            token.value = response.data.token;
-            console.log(token.value)
+            token.value = response.data.data.user_token;
             localStorage.setItem('token', token.value);
+
+            await router.push('/')
         } catch (error) {
             console.error('Ошибка при входе:', error);
         }
@@ -21,12 +23,15 @@ export const authStore = defineStore('auth', () => {
         try {
             const response = await axios.post('http://lifestealer86.ru/api-shop/signup', credentials);
             console.log(response)
-            token.value = response.data.token;
+            token.value = response.data.data.user_token;
+            console.log(response.data)
             console.log(token.value)
             localStorage.setItem('token', token.value);
+            await router.push('/')
         } catch (error) {
             console.error('Ошибка при регистрации:', error);
         }
+
     };
 
     const logout = () => {
@@ -34,9 +39,7 @@ export const authStore = defineStore('auth', () => {
         localStorage.removeItem('token');
     };
 
-    const loadToken = () => {
-        token.value = localStorage.getItem('token');
-    };
+    const isAuthenticated = computed(() => !!token.value);
 
-    return { token, login, register, logout, loadToken };
+    return { token, router, login, register, logout, isAuthenticated };
 });

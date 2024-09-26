@@ -1,7 +1,8 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import Card from "@/components/Card.vue";
+import ProductCard from "@/components/ProductCard.vue";
 import {useCardStore} from "@/stores/CardStore.js";
+
 
 const showScroll = ref(false);
 
@@ -31,7 +32,7 @@ onBeforeUnmount(() => {
   <div>
     <div class="catalog tracking-widest flex text-xl items-center justify-center uppercase p-2"><span class="text-white">каталог</span></div>
     <section class="p-9 flex flex-wrap gap-y-16 justify-between bg-white rounded-sm min-h-svh w-full">
-      <card
+      <product-card
         v-for="card of cardStore.cards"
         :key="card"
         :card = "card"

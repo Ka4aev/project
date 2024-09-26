@@ -16,6 +16,7 @@ const routes = [
       enterClass: 'animate__animated animate__fadeInRight',
       leaveClass: 'animate__animated animate__fadeOutLeft',
     }},
+  { name: 'order', path: '/order', component: () => import('@/views/OrderView.vue')},
 ]
 
 const router = createRouter({
