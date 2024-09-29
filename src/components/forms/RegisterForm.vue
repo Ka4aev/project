@@ -110,7 +110,8 @@ onMounted(() => console.log(isAuthenticated.value))
     </p>
 
     <button
-      :disabled="errors.email || errors.password"
+      :disabled="errors.email || errors.password || errors.fio"
+      :class="{'error-button' : errors.email || errors.password || errors.fio}"
       type="submit"
       @click="goHome"
     >
@@ -131,7 +132,12 @@ input:-webkit-autofill:focus {
 }
 .error-input{
   border: 0.15rem solid rgba(255, 0, 0, 0.78);
-
+}
+.error-button{
+  background: #aca2a2;
+  &:hover{
+    background: #aca2a2;
+  }
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

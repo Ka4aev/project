@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { ref} from "vue";
-import {api} from "@/shared/index.js";
+import { ref } from "vue";
+import { api } from "@/shared/index.js";
 
 export const useCardStore = defineStore("cardStore", () => {
     const cards = ref([]);
@@ -10,7 +10,6 @@ export const useCardStore = defineStore("cardStore", () => {
         cards.value = response.data;
         console.log(cards.value)
     };
-
 
     return {
         cards,

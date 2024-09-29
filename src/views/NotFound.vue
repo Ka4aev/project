@@ -6,7 +6,7 @@
         alt="tilt-smile"
         class="h-96"
       >
-      <h1>Ошибка 404</h1>
+      <h1>Ошибка 4<span class="text-blue-400">0</span>4</h1>
     </div>
 
     <p class="text-xl text-center w-3/4">

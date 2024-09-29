@@ -2,6 +2,7 @@
 import {computed} from "vue";
 import {storeToRefs} from "pinia";
 import {useAuthStore} from "@/stores/AuthStore.js";
+import {useBasketStore} from "@/stores/BasketStore.js";
 
 const props = defineProps({
   card:{
@@ -13,10 +14,10 @@ const props = defineProps({
     required: true
   },
 })
-const authStore = useAuthStore();
+const basketStore = useBasketStore();
 const { isAuthenticated } = storeToRefs(useAuthStore())
 
-const addToCart = async (productId) => await authStore.addToCart(productId);
+const addToBasket = async (productId) => await basketStore.addToBasket(productId);
 
 
 const buySectionHeight = computed(() => {
@@ -31,7 +32,7 @@ const imageUrl = computed(() => {
 </script>
 
 <template>
-  <article class="card shadow-lg z-20 p-4 relative overflow-hidden flex flex-col hover:shadow-2xl ease-in-out duration-200">
+  <article class="card">
     <img
       class="card-img -z-10 mt-2"
       :src='imageUrl'
@@ -41,7 +42,7 @@ const imageUrl = computed(() => {
     <button
       v-if="isAuthenticated"
       class="buy-button tracking-widest"
-      @click="addToCart(props.cardId)"
+      @click="addToBasket(props.cardId)"
     >
       в корзину
     </button>
@@ -68,6 +69,7 @@ const imageUrl = computed(() => {
 .card {
   width: 270px;
   height: 320px;
+  @apply shadow-lg z-20 p-4 relative overflow-hidden flex flex-col hover:shadow-2xl ease-in-out duration-200;
 
   &::before {
     content: '';

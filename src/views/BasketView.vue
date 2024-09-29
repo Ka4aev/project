@@ -1,15 +1,15 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import {ref, onMounted, onBeforeUnmount, computed} from 'vue';
 import BasketCard from "@/components/cards/BasketCard.vue";
-import {useAuthStore} from "@/stores/AuthStore.js";
+import { useBasketStore } from "@/stores/BasketStore.js";
+import {useOrdersStore} from "@/stores/OrdersStore.js";
 
 
 const showScroll = ref(false);
 
-const cartStore = useAuthStore()
-const { showCarts } = useAuthStore()
-const data = ref();
-
+const BasketStore = useBasketStore()
+const { getProducts } = useBasketStore()
+const { addToOrders } = useOrdersStore()
 const handleScroll = () => {
   showScroll.value = window.scrollY > window.innerHeight * 0.3;
 };
@@ -17,9 +17,18 @@ const handleScroll = () => {
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
-
+const groupedProducts = computed(() => {
+  return BasketStore.basketProducts.reduce((acc, product) => {
+    if (!acc[product.product_id]) {
+      acc[product.product_id] = { products: [], count: 0 };
+    }
+    acc[product.product_id].products.push(product);
+    acc[product.product_id].count += product.quantity;
+    return acc;
+  }, {});
+});
 onMounted(async () => {
-  data.value = await showCarts()
+  await getProducts()
   window.addEventListener('scroll', handleScroll);
 });
 
@@ -30,13 +39,37 @@ onBeforeUnmount(() => {
 
 <template>
   <div>
-    <div class="catalog"><button class="catalog-button">оформить</button></div>
-    <section class="p-9 flex flex-wrap gap-y-16 justify-between bg-white rounded-sm min-h-svh w-full">
-      <basket-card
-        v-for="cart of cartStore.carts"
-        :key="cart.id"
-        :cart = "cart"
-      />
+    <div class="catalog">
+      <button
+        v-show="BasketStore.basketProducts.length > 0"
+        class="catalog-button"
+        @click = "addToOrders"
+      >
+        оформить
+      </button>
+    </div>
+    <section class="p-9 flex flex-wrap gap-y-16 justify-start gap-8 bg-white rounded-sm min-h-svh w-full">
+      <h1
+        v-if="BasketStore.basketProducts.length === 0"
+        class="m-auto mt-48 text-blue-600 text-3xl"
+      >
+        Корзина пуста
+      </h1>
+      <div
+        v-for="(group, productId) in groupedProducts"
+        :key="productId"
+        class="flex gap-10 flex-wrap"
+      >
+        <div class="flex w-full gap-y-5 justify-around flex-wrap">
+          <basket-card
+            v-for="product in group.products.slice(0, 1)"
+            :key="product.id"
+            :group-count="group.count"
+            :group="group"
+            :product="product"
+          />
+        </div>
+      </div>
     </section>
     <img
       v-if="showScroll"

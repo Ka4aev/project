@@ -8,12 +8,8 @@ const routes = [
     // leaveClass: 'animate__animated animate__fadeOutRight',
     // }},
   { name: 'register', path: '/register', component: () => import('@/views/RegisterView.vue')},
-    // meta:{
-    //   enterClass: 'animate__animated animate__fadeInRight',
-    //   leaveClass: 'animate__animated animate__fadeOutLeft',
-    // }},
   { name: 'basket', path: '/basket', component: () => import('@/views/BasketView.vue')},
-  { name: 'order', path: '/order', component: () => import('@/views/OrderView.vue')},
+  { name: 'orders', path: '/orders', component: () => import('@/views/OrdersView.vue')},
 
 ]
 

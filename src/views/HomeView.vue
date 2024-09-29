@@ -7,8 +7,7 @@ import {useCardStore} from "@/stores/CardStore.js";
 const showScroll = ref(false);
 
 const cardStore = useCardStore()
-const { getCards } = useCardStore()
-const data = ref();
+const { getCards } = useCardStore();
 
 const handleScroll = () => {
   showScroll.value = window.scrollY > window.innerHeight * 0.3;
@@ -18,8 +17,8 @@ const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-onMounted(async () => {
-  data.value = await getCards()
+onMounted( async () => {
+  await getCards()
   window.addEventListener('scroll', handleScroll);
 });
 
