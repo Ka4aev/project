@@ -35,17 +35,10 @@ const [fio, fioAttrs] = defineField('fio')
 
 const submit = handleSubmit((values) => {
   authStore.register({ email: values.email, password: values.password, fio: values.fio })})
-//   axios.post(API_LINK, {
-//     fio: values.fio,
-//     email: values.email,
-//     password: values.password
-//   }).then((res) => console.log(res.data))
-//       .catch((err) => console.error(err))
-// })
+
 const goHome = () =>{
   isAuthenticated.value ? router.push('/') : null;
 }
-onMounted(() => console.log(isAuthenticated.value))
 </script>
 
 <template>
@@ -70,7 +63,7 @@ onMounted(() => console.log(isAuthenticated.value))
     />
     <p
       v-if="errors.fio"
-      class="ml-40 text-base -mt-3.5 opacity-80 text-blue-950"
+      class="error-message"
     >
       {{ errors.fio }}
     </p>
@@ -81,12 +74,13 @@ onMounted(() => console.log(isAuthenticated.value))
       :class ="{'error-input' : errors.email}"
       type="email"
       name="email"
+      autocomplete="user-name"
       placeholder="Почта"
       required
     />
     <p
       v-if="errors.email"
-      class="ml-40 text-base -mt-3.5 opacity-80 text-blue-950"
+      class="error-message"
     >
       {{ errors.email }}
     </p>
@@ -98,13 +92,14 @@ onMounted(() => console.log(isAuthenticated.value))
       :class="{'error-input' : errors.password}"
       type="password"
       name="password"
+      autocomplete="current-password"
       placeholder="Пароль"
       
       required
     />
     <p
       v-if="errors.password"
-      class="ml-40 text-base -mt-3.5 opacity-80 text-blue-950"
+      class="error-message"
     >
       {{ errors.password }}
     </p>
@@ -130,6 +125,14 @@ input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0 1000px #d3d2ff inset !important;
   -webkit-text-fill-color: #06459c !important;
 }
+
+.error-message{
+  @apply ml-40 text-base -mt-3.5 opacity-80 text-blue-950;
+
+  @media screen and (max-width:550px ) {
+    @apply ml-0 text-center
+  }
+}
 .error-input{
   border: 0.15rem solid rgba(255, 0, 0, 0.78);
 }
@@ -148,45 +151,19 @@ input::-webkit-inner-spin-button {
   letter-spacing: 2px;
 }
 label {
-  color: #fff;
-  font-size: 2.5em;
-  justify-content: center;
-  display: flex;
-  margin:40px;
-  font-weight: bold;
-  cursor: pointer;
+  @apply text-white text-4xl/normal justify-center flex m-10 font-bold cursor-pointer;
   transition: 0.5s ease-in-out;
 }
 input {
-  width: 60%;
-  height: 35px;
-  background: #ffffff;
-  justify-content: center;
-  display: flex;
-  margin: 20px auto;
-  padding: 12px;
-  border: none;
-  outline: none;
-  border-radius: 5px;
+  @apply w-3/5 h-9 bg-white justify-center flex my-5 mx-auto p-3 border-none outline-none rounded-md;
 }
 button {
-  width: 60%;
-  height: 40px;
-  margin: 30px auto;
-  justify-content: center;
-  display: block;
-  color: #fff;
-  background: #2861c3;
-  font-size: 1em;
-  font-weight: bold;
-  outline: none;
-  border: none;
-  border-radius: 5px;
+  @apply w-3/5 h-10 my-8 mx-auto justify-center block text-white text-base font-bold border-none outline-none rounded-md cursor-pointer;
+  background: $button-auth-color;
   transition: 0.2s ease-in;
-  cursor: pointer;
 }
 button:hover {
-  background: #568ee4;
+  background: $button-auth-hover;
 }
 #chk:checked ~ .signup label {
   transform: scale(0.6);

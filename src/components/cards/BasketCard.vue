@@ -1,9 +1,13 @@
 <script setup>
-import { computed, ref, watch } from 'vue'
+import {computed, onMounted, ref, watch} from 'vue'
 import { useBasketStore } from '@/stores/BasketStore.js'
-import {toast} from "vue3-toastify";
+import {buySectionHeight, imageUrl, toastNotification} from "@/shared/functions.js";
+import {useCardStore} from "@/stores/CardStore.js";
+import {storeToRefs} from "pinia";
 
 const { removeFromBasket, updateQuantity, getProducts } = useBasketStore()
+const { getCards } = useCardStore()
+const { cards } = storeToRefs(useCardStore())
 
 const props = defineProps({
   product: {
@@ -28,52 +32,45 @@ watch(
   }
 )
 
-console.log(props.group)
+const productCard = computed(() => {
+  return cards.value.find(card => card.id === props.product.product_id)
+})
 
 const removeProduct = async () => {
   props.group.products.forEach(
     (item) => removeFromBasket(item.id)
   );
-  toast("Товар удален из корзины!", {
-    autoClose: 2000,
-    theme: "auto",
-    type: "success",
-    position: "top-right",
-    dangerouslyHTMLString: true
-  });
+  toastNotification("Товар удален из корзины!","success")
 }
-
-const buySectionHeight = computed(() => {
-  const baseHeight = 40 // базовая высота
-  const extraHeight = Math.ceil(props.product.description.length / 10) * 12 // за каждые 10 символов 12px
-  return `${baseHeight + extraHeight}px`
-})
-
-const imageUrl = computed(() => {
-  return `${import.meta.env.VITE_API_IMG}${props.product.image}`
-})
-console.log(props.product)
 
 const increment = async () => {
   quantity.value++
-  await updateQuantity(props.product.product_id, 1) // Увеличение количества
+  toastNotification('Количество товара увеличено!','info');
+  await updateQuantity(props.product.product_id, 1); // Увеличение количества
 }
 
 const decrement = async () => {
   if (quantity.value > 1) {
     quantity.value--
-    await updateQuantity(props.product.id, -1) // Уменьшение количества
+    toastNotification('Количество товара убавлено!','info');
+    await updateQuantity(props.product.id, -1); // Уменьшение количества
   }
 }
+
+onMounted(async () => {
+  await getCards()
+})
+
 </script>
 
 <template>
   <article
-    class="product shadow-lg z-20 p-4 relative overflow-hidden flex flex-col hover:shadow-2xl ease-in-out duration-200"
+    v-if="productCard"
+    class="product"
   >
     <img
-      class="product-img -z-10 mt-2"
-      :src="imageUrl"
+      class="product-img h-48 -z-10 mt-2"
+      :src="imageUrl(productCard)"
       alt="Product Image"
     />
     <div class="info mt-6 flex justify-between tracking-wide">
@@ -82,8 +79,8 @@ const decrement = async () => {
     </div>
 
     <div
-      class="buy-section absolute z-30 flex justify-between w-full p-4 flex-col"
-      :style="{ height: buySectionHeight }"
+      class="buy-section"
+      :style="{ height: buySectionHeight(props.product)}"
     >
       <div>
         <div
@@ -92,7 +89,7 @@ const decrement = async () => {
           <p>{{ product.name }}</p>
           <span class="text-green-600 pl-2">₽{{ product.price }}</span>
         </div>
-        <p class="product-text text-gray-500 w-full text-xs text-justify">
+        <p class="product-text ">
           {{ product.description }}
         </p>
       </div>
@@ -131,8 +128,7 @@ const decrement = async () => {
 
 <style scoped lang="scss">
 .product {
-  width: 270px;
-  height: 320px;
+  @apply shadow-lg z-20 p-4 relative overflow-hidden flex flex-col hover:shadow-2xl ease-in-out duration-200 w-[270px] h-80;
 
   &-counting {
     transition: 0.3s all ease-in-out;
@@ -156,18 +152,16 @@ const decrement = async () => {
     content: '';
     @apply absolute top-0 left-0 right-0 bottom-0 opacity-0 z-0;
     background-color: rgba(77, 115, 198, 0.33);
-    transition: opacity 0.3s ease;
+    transition: all 0.3s ease;
   }
 
   &:hover::before {
     opacity: 1;
   }
 
-  &-img {
-    height: 200px;
-  }
   &-text {
     font-family: $default-font;
+    @apply text-gray-500 w-full text-xs text-justify;
   }
 }
 
@@ -177,11 +171,8 @@ const decrement = async () => {
 }
 
 .buy-section {
-  max-height: 200px;
-  @apply left-0 right-0 bottom-0;
-  background-color: white;
-  transform: translateY(100%);
-  transition: transform 0.5s ease;
+  @apply left-0 right-0 bottom-0 absolute z-30 flex justify-between w-full p-4 flex-col max-h-52 bg-white translate-y-full;
+  transition: all 0.5s ease;
 }
 
 .product:hover .info {

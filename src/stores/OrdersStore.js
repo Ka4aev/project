@@ -2,7 +2,8 @@ import {defineStore, storeToRefs} from "pinia";
 import { ref } from "vue";
 import { api } from "@/shared/index.js";
 import {useAuthStore} from "@/stores/AuthStore.js";
-import {toast} from "vue3-toastify";
+import {toastNotification} from "@/shared/functions.js";
+
 
 export const useOrdersStore = defineStore("ordersStore", () => {
     const ordersProducts = ref([]);
@@ -16,7 +17,6 @@ export const useOrdersStore = defineStore("ordersStore", () => {
                 }
             });
             ordersProducts.value = response.data.data
-            console.log(ordersProducts.value)
         } catch (error) {
             console.error('Ошибка при получении заказов:', error);
         }
@@ -29,36 +29,11 @@ export const useOrdersStore = defineStore("ordersStore", () => {
                     Authorization: `Bearer ${token.value}`
                 }
             });
-            console.log(response)
-            toast("Товары добавлены в заказ!", {
-                autoClose: 2000,
-                theme: "auto",
-                type: "success",
-                position: "top-right",
-                dangerouslyHTMLString: true
-            });
+            toastNotification("Товары добавлены в заказ!","success")
             await getOrders(); // Обновляем корзину после изменения
             return response.data;
         } catch (error) {
-            if (error.response && error.response.status === 404) {
-                toast("Заказ не найден!", {
-                    autoClose: 2000,
-                    theme: "auto",
-                    type: "error",
-                    position: "top-right",
-                    dangerouslyHTMLString: true
-                });
-            } else {
-                console.error('Ошибка при добавлении заказа:', error);
-                toast("Ошибка при добавлении заказа", {
-                    autoClose: 2000,
-                    theme: "auto",
-                    type: "error",
-                    position: "top-right",
-                    dangerouslyHTMLString: true
-                });
-            }
-            throw error;
+            console.log(error)
         }
     };
 

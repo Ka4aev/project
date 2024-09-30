@@ -33,12 +33,14 @@ const handleLogin = () => {
         type="email"
         name="email"
         placeholder="Почта"
+        autocomplete="username"
         required
       />
       <input
         v-model="password"
         type="password"
         name="pswd"
+        autocomplete="current-password"
         placeholder="Пароль"
         required
       />
@@ -71,56 +73,31 @@ input::-webkit-inner-spin-button {
   letter-spacing: 2px;
 }
 label {
-  color: #fff;
-  font-size: 2.5em;
-  justify-content: center;
-  display: flex;
-  margin: 50px;
-  font-weight: bold;
-  cursor: pointer;
+  @apply text-white text-5xl/normal justify-center flex m-12 font-bold cursor-pointer;
   transition: 0.5s ease-in-out;
 }
 input {
-  width: 60%;
-  height: 35px;
-  background: #ffffff;
-  justify-content: center;
-  display: flex;
-  margin: 20px auto;
-  padding: 12px;
-  border: none;
-  outline: none;
-  border-radius: 5px;
+  @apply w-3/5 h-9 bg-white justify-center flex my-5 mx-auto p-3 border-none outline-none rounded-md;
 }
 button {
-  width: 60%;
-  height: 40px;
-  margin: 30px auto;
-  justify-content: center;
-  display: block;
-  color: #fff;
-  background: #2861c3;
-  font-size: 1em;
-  font-weight: bold;
-  outline: none;
-  border: none;
-  border-radius: 5px;
-  transition: 0.2s ease-in;
-  cursor: pointer;
-}
-button:hover {
-  background: #568ee4;
+  @apply w-3/5 h-10 my-8 mx-auto justify-center block text-white text-base font-bold border-none outline-none rounded-md cursor-pointer;
+  background: $button-auth-color;
+  transition: all 0.2s ease-in;
+
+  &:hover {
+    background: $button-auth-hover;
+  }
 }
 .login {
-  height: 490px;
+  @apply h-[490px] -translate-y-48;
   background: #eee;
   border-radius: 60% / 10%;
-  transform: translateY(-190px);
   transition: 0.8s ease-in-out;
-}
-.login label {
-  color: #573b8a;
-  transform: scale(0.6);
+
+  & label {
+    color: #573b8a;
+    transform: scale(0.6);
+  }
 }
 
 #chk:checked ~ .login {

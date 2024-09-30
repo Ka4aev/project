@@ -11,7 +11,9 @@
 
     <p class="text-xl text-center w-3/4">
       Страница, которую вы ищете, не существует или произошла другая ошибка.
-      Вернитесь назад или перейдите по ссылке <router-link to="/"><span class="text-blue-400 hover:underline duration-300">simplebuy.com</span></router-link>, чтобы выбрать новое направление.
+      Вернитесь назад или перейдите по ссылке
+      <router-link to="/"><span class="text-blue-400 hover:underline duration-300">simplebuy.com</span></router-link>
+      , чтобы выбрать новое направление.
     </p>
   </div>
 </template>

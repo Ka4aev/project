@@ -8,7 +8,6 @@ export const useCardStore = defineStore("cardStore", () => {
     const getCards = async () => {
         const response = (await api(`products`)).data
         cards.value = response.data;
-        console.log(cards.value)
     };
 
     return {

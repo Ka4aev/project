@@ -5,9 +5,9 @@ import LoginForm from "@/components/forms/LoginForm.vue";
 
 <template>
   <div
-    class="m-0 p-0 justify-center items-center min-h-svh overflow-hidden flex"
+    class="m-0 mt-12 p-0 justify-center items-center flex"
   >
-    <div class="main overflow-hidden rounded-xl drop-shadow-2xl">
+    <div class="main">
       <input
         id="chk"
         class="hidden"
@@ -17,7 +17,6 @@ import LoginForm from "@/components/forms/LoginForm.vue";
       <div class="relative w-full h-full">
         <register-form/>
       </div>
-
       <login-form/>
     </div>
   </div>
@@ -25,11 +24,7 @@ import LoginForm from "@/components/forms/LoginForm.vue";
 
 <style scoped lang="scss">
 .main {
-  width: 800px;
-  height: 550px;
+  @apply overflow-hidden rounded-xl drop-shadow-2xl w-[800px] h-[550px];
   background: linear-gradient($blue-color, #415bb6);
 }
-
-
-
 </style>
