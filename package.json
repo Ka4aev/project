@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint ."
@@ -16,7 +16,7 @@
     "eslint-plugin-oxlint": "^0.9.6",
     "lodash": "^4.17.21",
     "pinia": "^2.1.7",
-    "sass": "^1.78.0",
+    "sass": "^1.79.4",
     "vee-validate": "^4.13.2",
     "vue": "^3.4.29",
     "vue-router": "^4.3.3",

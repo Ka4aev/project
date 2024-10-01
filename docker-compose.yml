@@ -1,0 +1,15 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .  # Указываем путь к Dockerfile (текущая директория)
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"  # Пробрасываем порт для приложения
+    volumes:
+      - .:/app  # Монтируем текущую директорию для разработки
+      - /app/node_modules  # Исключаем node_modules для повышения производительности
+    environment:
+      - NODE_ENV=development
+    stdin_open: true
+    tty: true
