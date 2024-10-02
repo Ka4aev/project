@@ -3,6 +3,7 @@ import {storeToRefs} from "pinia";
 import {useAuthStore} from "@/stores/AuthStore.js";
 import {useBasketStore} from "@/stores/BasketStore.js";
 import {buySectionHeight, imageUrl, toastNotification} from "@/shared/functions.js";
+import { debounce } from 'lodash'
 
 const props = defineProps({
   card:{
@@ -14,10 +15,14 @@ const props = defineProps({
 const { isAuthenticated } = storeToRefs(useAuthStore())
 const { addToBasket } = useBasketStore()
 
-const addToBasketButton = () =>{
+
+/*дебаунс для предотвращения отправки несколько запросов на 1 нажатие/id
+используется в нексольких местах, знаю что не совсем правильно, но пойдет
+ */
+const addToBasketButton = debounce(() =>{
   toastNotification('Товар добавлен в корзину!','success');
   addToBasket(props.card.id);
-}
+},200)
 </script>
 
 <template>

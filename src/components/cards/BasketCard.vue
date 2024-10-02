@@ -4,6 +4,7 @@ import { useBasketStore } from '@/stores/BasketStore.js'
 import {buySectionHeight, imageUrl, toastNotification} from "@/shared/functions.js";
 import {useCardStore} from "@/stores/CardStore.js";
 import {storeToRefs} from "pinia";
+import { debounce } from 'lodash';
 
 const { removeFromBasket, updateQuantity, getProducts } = useBasketStore()
 const { getCards } = useCardStore()
@@ -25,37 +26,51 @@ const props = defineProps({
 })
 const quantity = ref(props.groupCount)
 
+// Синхронизируем количество
 watch(
-  () => props.groupCount,
-  (newCount) => {
-    quantity.value = newCount // Синхронизация с пропсами
-  }
+    () => props.groupCount,
+    (newCount) => {
+        quantity.value = newCount;
+    }
 )
 
 const productCard = computed(() => {
   return cards.value.find(card => card.id === props.product.product_id)
 })
 
-const removeProduct = async () => {
-  props.group.products.forEach(
-    (item) => removeFromBasket(item.id)
-  );
-  toastNotification("Товар удален из корзины!","success")
+const removeProduct = async (productId) => {
+  const productElement = document.getElementById(`product-${productId}`);
+  if (productElement) {
+    productElement.style.transition = 'opacity 0.5s';
+    productElement.style.opacity = 0;
+  }
+
+  // Ждем пока анимация завершится и удаляем
+  setTimeout( ()=>{
+    props.group.products.forEach(
+      (item) => removeFromBasket(item.id)
+    );
+    toastNotification("Товар удален из корзины!","success")
+  },500)
 }
 
-const increment = async () => {
+const increment = debounce(async () => {
   quantity.value++
   toastNotification('Количество товара увеличено!','info');
   await updateQuantity(props.product.product_id, 1); // Увеличение количества
-}
+},300)
 
-const decrement = async () => {
+const decrement = debounce(async () => {
   if (quantity.value > 1) {
-    quantity.value--
-    toastNotification('Количество товара убавлено!','info');
-    await updateQuantity(props.product.id, -1); // Уменьшение количества
+    quantity.value--;  // Уменьшаем количество локально
+    toastNotification('Количество товара убавлено!', 'info');
+
+    await updateQuantity(props.product.id, -1); // Отправляем запрос на сервер
+
+  } else {
+    toastNotification('Минимальное количество товара — 1!', 'warning');
   }
-}
+},300);
 
 onMounted(async () => {
   await getCards()
@@ -66,6 +81,7 @@ onMounted(async () => {
 <template>
   <article
     v-if="productCard"
+    :id="`product-${product.id}`"
     class="product"
   >
     <img
@@ -97,7 +113,6 @@ onMounted(async () => {
       <div class="flex justify-between">
         <div class="flex gap-2.5">
           <button
-            :disabled="quantity <= 1"
             @click="decrement"
           >
             <img
@@ -117,7 +132,7 @@ onMounted(async () => {
         </div>
         <button
           class="product-button"
-          @click="removeProduct().then(() => getProducts())"
+          @click="removeProduct(props.product.id).then(() => getProducts())"
         >
           удалить
         </button>

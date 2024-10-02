@@ -1,5 +1,6 @@
 <script setup>
 import {ref, onMounted, onBeforeUnmount, computed} from 'vue';
+
 import BasketCard from "@/components/cards/BasketCard.vue";
 import { useBasketStore } from "@/stores/BasketStore.js";
 import {useOrdersStore} from "@/stores/OrdersStore.js";
@@ -10,7 +11,6 @@ const BasketStore = useBasketStore()
 const { getProducts } = useBasketStore()
 const { addToOrders } = useOrdersStore()
 const router = useRouter();
-
 
 const showScroll = ref(false);
 
@@ -81,7 +81,6 @@ onBeforeUnmount(() => {
         <div class="flex w-full gap-y-5 justify-around flex-wrap">
           <basket-card
             v-for="product in group.products.slice(0, 1)"
-            :key="product.id"
             :group-count="group.count"
             class="basket-item"
             :group="group"

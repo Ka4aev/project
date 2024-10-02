@@ -53,7 +53,7 @@ onBeforeUnmount(() => {
   &-section{
     @apply items-center;
 
-    @media screen and (max-width: 1200px) {
+    @media screen and (max-width: 1300px) {
       @apply justify-around gap-x-8;
     }
   }

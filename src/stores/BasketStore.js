@@ -31,6 +31,7 @@ export const useBasketStore = defineStore('BasketStore', () => {
             });
 
             await getProducts(); // Обновляем корзину после изменения
+            // basketProducts.value = basketProducts.value.filter(item => item.id !== productId);
         } catch (error) {
             console.log(error)
         }

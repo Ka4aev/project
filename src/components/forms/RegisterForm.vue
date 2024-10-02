@@ -4,7 +4,6 @@ import {useForm} from "vee-validate";
 
 
 import {useAuthStore} from "@/stores/AuthStore.js";
-import {onMounted} from "vue";
 import {storeToRefs} from "pinia";
 import {useRouter} from "vue-router";
 
