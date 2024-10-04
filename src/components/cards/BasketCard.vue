@@ -58,7 +58,7 @@ const increment = debounce(async () => {
   quantity.value++
   toastNotification('Количество товара увеличено!','info');
   await updateQuantity(props.product.product_id, 1); // Увеличение количества
-},300)
+},200)
 
 const decrement = debounce(async () => {
   if (quantity.value > 1) {
@@ -70,7 +70,7 @@ const decrement = debounce(async () => {
   } else {
     toastNotification('Минимальное количество товара — 1!', 'warning');
   }
-},300);
+},200);
 
 onMounted(async () => {
   await getCards()
