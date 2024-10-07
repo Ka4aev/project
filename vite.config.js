@@ -7,6 +7,10 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/project/',
+  build: {
+    outDir: 'dist', // директория сборки
+    assetsDir: 'assets', // директория для ресурсов
+  },
   plugins: [
     vue(),
     vueDevTools(),
