@@ -58,7 +58,7 @@ const increment = debounce(async () => {
   quantity.value++
   toastNotification('Количество товара увеличено!','info');
   await updateQuantity(props.product.product_id, 1); // Увеличение количества
-},200)
+},300)
 
 const decrement = debounce(async () => {
   if (quantity.value > 1) {

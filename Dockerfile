@@ -21,5 +21,3 @@ RUN npm run build
 
 # Команда для запуска приложения
 CMD ["npm", "run", "dev"]
-
-CMD ["vite", "--host"]
