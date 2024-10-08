@@ -3,6 +3,7 @@ import { ref, onMounted, onBeforeUnmount } from 'vue';
 import ProductCard from "@/components/cards/ProductCard.vue";
 import {useCardStore} from "@/stores/CardStore.js";
 import {scrollToTop} from "@/shared/functions.js";
+import ProductCardSkeleton from "@/components/cards/ProductCardSkeleton.vue";
 
 
 const showScroll = ref(false);
@@ -28,11 +29,19 @@ onBeforeUnmount(() => {
   <div>
     <div class="catalog"><span class="text-white">каталог</span></div>
     <section class="catalog-section">
-      <product-card
-        v-for="card of cardStore.cards"
-        :key="card.id"
-        :card = "card"
-      />
+      <template v-if="cardStore.cards.length">
+        <product-card
+          v-for="card in cardStore.cards"
+          :key="card.id"
+          :card="card"
+        />
+      </template>
+      <template v-else>
+        <product-card-skeleton
+          v-for="item in 8"
+        />
+      </template>
+      
       <img
         v-if="showScroll"
         class="scroll-up"
