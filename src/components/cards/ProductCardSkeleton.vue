@@ -2,7 +2,7 @@
   <article class="card">
     <div class="card-img h-48 -z-10 mt-2"/>
 
-    <div class="mt-8 flex justify-between">
+    <div class="card-info mt-8 flex justify-between">
       <p class="card-text w-3/5 h-4"></p>
       <span class="card-span pl-2 w-1/5 h-4"></span>
     </div>
@@ -14,6 +14,12 @@
   width: 270px;
   height: 320px;
   @apply shadow-lg z-20 p-4 relative overflow-hidden flex flex-col;
+  @media screen and (max-width: 995px) {
+    @apply w-56 h-64;
+  }
+  @media screen and (max-width: 595px) {
+    @apply w-[270px] h-[320px];
+  }
 
   &-img, &-text, &-span {
     position: relative;
@@ -23,12 +29,27 @@
     outline: none;
   }
 
+
   &-img {
     animation: shimmer 1.5s infinite linear;
+    @media screen and (max-width: 995px) {
+      @apply h-32;
+    }
+    @media screen and (max-width: 595px) {
+      @apply h-48;
+    }
   }
 
   &-text, &-span {
     animation: shimmer 1.5s infinite linear;
+  }
+  &-info{
+    @media screen and (max-width: 995px){
+      @apply text-sm justify-between gap-1;
+    }
+    @media screen and (max-width: 995px){
+      @apply text-base;
+    }
   }
 }
 
