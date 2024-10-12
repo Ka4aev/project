@@ -37,8 +37,8 @@ onBeforeUnmount(() => {
       </template>
       <template v-else>
         <product-card-skeleton
-          v-for="card in cardStore.cards"
-          :key="card"
+          v-for="item in 8"
+          :key="item"
         />
       </template>
 
