@@ -8,27 +8,25 @@ const authStore = useAuthStore();
 </script>
 
 <template>
-  <nav>
-    <menu class="header-nav">
-      <template v-if="isAuthenticated">
-        <router-link to="/basket"><li>корзина</li></router-link>
-        <router-link to="/orders"><li>заказы</li></router-link>
-      </template>
-      <button
-        v-if="!isAuthenticated"
-        class="flex p-2 bg-black rounded text-white uppercase hover:bg-blue-200 hover:text-black ease-in-out duration-300"
-        @click="$router.push('/register')"
-      >
-        регистрация/вход
-      </button>
-      <button
-        v-else
-        class="flex p-2 bg-black rounded text-white uppercase hover:bg-blue-200 hover:text-black ease-in-out duration-300"
-        @click="authStore.logout"
-      >
-        выйти
-      </button>
-    </menu>
+  <nav class="header-nav">
+    <template v-if="isAuthenticated">
+      <router-link to="/basket">корзина</router-link>
+      <router-link to="/orders">заказы</router-link>
+    </template>
+    <router-link
+      v-if="!isAuthenticated"
+      class="flex p-2 bg-black rounded text-white uppercase hover:bg-blue-200 hover:text-black ease-in-out duration-300"
+      to="/register"
+    >
+      регистрация/вход
+    </router-link>
+    <button
+      v-else
+      class="flex p-2 bg-black rounded text-white uppercase hover:bg-blue-200 hover:text-black ease-in-out duration-300"
+      @click="authStore.logout"
+    >
+      выйти
+    </button>
   </nav>
 </template>
 
