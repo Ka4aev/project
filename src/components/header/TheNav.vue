@@ -10,23 +10,32 @@ const authStore = useAuthStore();
 <template>
   <nav class="header-nav">
     <template v-if="isAuthenticated">
-      <router-link to="/basket">корзина</router-link>
-      <router-link to="/orders">заказы</router-link>
+      <router-link
+        to="/basket"
+        class="li"
+      >
+        корзина
+      </router-link>
+      <router-link
+        class="li"
+        to="/orders"
+      >
+        заказы
+      </router-link>
+      <button
+        class="flex p-2 bg-black rounded text-white uppercase hover:bg-blue-200 hover:text-black ease-in-out duration-300"
+        @click="authStore.logout"
+      >
+        выйти
+      </button>
     </template>
     <router-link
       v-if="!isAuthenticated"
-      class="flex p-2 bg-black rounded text-white uppercase hover:bg-blue-200 hover:text-black ease-in-out duration-300"
+      class="flex p-2 bg-black rounded uppercase hover:bg-blue-200  ease-in-out duration-300"
       to="/register"
     >
-      регистрация/вход
+      <span class="text-white hover:text-black">регистрация/вход</span>
     </router-link>
-    <button
-      v-else
-      class="flex p-2 bg-black rounded text-white uppercase hover:bg-blue-200 hover:text-black ease-in-out duration-300"
-      @click="authStore.logout"
-    >
-      выйти
-    </button>
   </nav>
 </template>
 
@@ -41,14 +50,14 @@ const authStore = useAuthStore();
     @apply gap-2
   }
 }
-a.router-link-active li::after {
+a.router-link-active .li::after {
   width: 100%;
 }
-li {
+.li {
   @apply inline relative cursor-pointer;
 }
 
-li::after {
+.li::after {
   content: '';
   @apply block w-0 absolute left-0 -bottom-1 rounded;
   background: #bbb8f3;
@@ -56,7 +65,7 @@ li::after {
   height: 3px;
 }
 
-li:hover::after {
+.li:hover::after {
   width: 100%;
 }
 </style>
